@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import * as ReactDOMClient from "react-dom/client";
 import "./index.css";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import {
+  Router,
+  Route,
+  BrowserRouter,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import NavBar from "../src/components/nav";
 import Home from "./pages/home.jsx";
 import CreateAccount from "./pages/createaccount.jsx";
-// import Deposit from "./pages/deposit.jsx";
-// import Withdraw from "./pages/withdraw.jsx";
-// import AllData from "./pages/alldata.jsx";
+import Deposit from "./pages/deposit.jsx";
+import Alldata from "./pages/alldata.jsx";
+import Login from "./pages/login.jsx";
+import Logout from "./pages/logout.jsx";
+import Withdraw from "./pages/withdraw.jsx";
 import reportWebVitals from "./reportWebVitals.js";
-import NavTabs from "./components/nav.jsx";
+//import NavTabs from "./components/nav.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UserContext from "./context/context.jsx";
 //import { initializeParse } from "@parse/react";
@@ -19,28 +28,51 @@ import UserContext from "./context/context.jsx";
 //   "qgX3533kBcyikvHasOJhDx3Exbxscfw4PR6kW1pS"
 // );
 
+const LoginContainer = () => {
+  return (
+    <Router>
+      <Routes>
+        <div className="container">
+          <Route exact path="/" render={() => <Navigate to="/login" />} />
+          <Route path="login" element={<Login />} />
+          <Route path="createaccount" element={<CreateAccount />} />
+        </div>
+      </Routes>
+    </Router>
+  );
+};
+
+function DefaultContainer() {
+  const [users, setUsers] = useState({});
+  const providedValue = useMemo(() => ({ users, setUsers }), [users, setUsers]);
+
+  return (
+    <div>
+      {/* <Header toggleAlert={this.toggleAlert} /> */}
+      <div className="container">
+        <NavBar />
+        <UserContext.Provider value={providedValue}>
+          <Route path="/" element={<Home />} />
+          <Route path="logout" element={<Logout />} />
+          <Route path="deposit" element={<Deposit />} />
+          <Route path="withdraw" element={<Withdraw />} />
+          <Route path="alldata" element={<Alldata />} />
+          {/* {this.state.isAlertOpen ? <Alert /> : null} */}
+        </UserContext.Provider>
+      </div>
+    </div>
+  );
+}
+
 const root = ReactDOMClient.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <HashRouter>
-      <NavTabs />
-      <UserContext.Provider value={{ users: [] }}>
-        <div className="container" style={{ padding: "20px" }}>
-          <Routes>
-            <Route path="/" exact element={<Home />} />
-            <Route path="/home" exact element={<Home />} />
-            <Route path="/createaccount" element={<CreateAccount />} />
-            {/* <Route path="/deposit" element={Deposit} />
-          <Route path="/withdraw" element={Withdraw} />
-          <Route path="/alldata" element={AllData} /> */}
-          </Routes>
-        </div>
-      </UserContext.Provider>
-    </HashRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<LoginContainer />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

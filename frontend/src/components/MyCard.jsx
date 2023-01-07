@@ -12,7 +12,7 @@ function MyCard(props) {
         <Card.Text>
           {props.text && <span className="card-text">{props.text}</span>}
           {props.body}
-          {props.status && <div id="createStatus">{props.status}</div>}
+          {props.status && <span id="createStatus">{props.status}</span>}
         </Card.Text>
       </Card.Body>
     </Card>

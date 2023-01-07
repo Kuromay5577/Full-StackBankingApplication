@@ -1,8 +1,15 @@
 import Container from "react-bootstrap/Container";
 import { Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import UserContext from "../context/context.jsx";
+import React, { useContext } from "react";
 
 function NavTabs() {
+  const [name] = React.useState("");
+  const ctx = useContext(UserContext);
+
+  console.log(ctx ? ctx.users : "NULL");
+  console.log(name);
   return (
     <Navbar bg="light" expand="lg">
       <Container>
@@ -18,14 +25,11 @@ function NavTabs() {
             <Nav.Link as={Link} to="login">
               Login
             </Nav.Link>
-            <Nav.Link as={Link} to="#deposit">
+            <Nav.Link as={Link} to="deposit">
               Deposit
             </Nav.Link>
             <Nav.Link as={Link} to="withdraw">
               Withdraw
-            </Nav.Link>
-            <Nav.Link as={Link} to="balance">
-              Balance
             </Nav.Link>
             <Nav.Link as={Link} to="alldata">
               All Data
